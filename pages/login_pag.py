@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -6,6 +7,7 @@ import time
 
 from pages.registration_page import User
 from pages.maine_page import Maine_page
+from utilites.Logger import Logger
 
 
 class Login_account(Maine_page, User):
@@ -59,25 +61,31 @@ class Login_account(Maine_page, User):
 
     # Methods
     def login_with_email(self, email, password):
-        self.maine_page.to_entrance()
-        self.driver.maximize_window()
-        time.sleep(3)
-        self.input_email(email)
-        self.input_password(password)
-        time.sleep(3)
-        self.click_enter_button()
-        time.sleep(5)
-        # self.assert_url("https://100sistem.ru/index.php?dispatch=auth.login_form")
-        print("Успешный вход по email")
+        with allure.step("Login with email"):
+            Logger.add_start_step(method='login_with_email')
+            self.maine_page.to_entrance()
+            self.driver.maximize_window()
+            time.sleep(3)
+            self.input_email(email)
+            self.input_password(password)
+            time.sleep(3)
+            self.click_enter_button()
+            time.sleep(5)
+            # self.assert_url("https://100sistem.ru/index.php?dispatch=auth.login_form")
+            print("Успешный вход по email")
+            Logger.add_end_step(url=self.driver.current_url, method='login_with_email')
 
     def login_with_lcard(self, loyalty_card, password):
-        self.maine_page.to_entrance()
-        self.driver.maximize_window()
-        time.sleep(3)
-        self.input_lcard(loyalty_card)
-        self.input_password(password)
-        time.sleep(3)
-        self.click_enter_button()
-        time.sleep(5)
-        # self.assert_url("https://100sistem.ru/index.php?dispatch=auth.login_form")
-        print("Успешный вход по карте лояльности")
+        with allure.step("Login with lcard"):
+            Logger.add_start_step(method='login_with_lcard')
+            self.maine_page.to_entrance()
+            self.driver.maximize_window()
+            time.sleep(3)
+            self.input_lcard(loyalty_card)
+            self.input_password(password)
+            time.sleep(3)
+            self.click_enter_button()
+            time.sleep(5)
+            # self.assert_url("https://100sistem.ru/index.php?dispatch=auth.login_form")
+            print("Успешный вход по карте лояльности")
+            Logger.add_end_step(url=self.driver.current_url, method='login_with_lcard')

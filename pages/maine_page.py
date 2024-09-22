@@ -1,11 +1,13 @@
 import time
 
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 
 from base.base_cl import Base
+from utilites.Logger import Logger
 
 
 class Maine_page(Base):
@@ -81,39 +83,42 @@ class Maine_page(Base):
 
     # Methods
     def to_registration(self):
-        """ Переход к странице регистрации"""
-        self.driver.get(self.url)  # Добавлен переход на URL
-        self.get_current_url()
-        self.click_account()
-        self.click_account_reg()
+        with allure.step("To registration"):
+            Logger.add_start_step(method='to_registration')
+            """ Переход к странице регистрации"""
+            self.driver.get(self.url)  # Добавлен переход на URL
+            self.get_current_url()
+            self.click_account()
+            self.click_account_reg()
+            Logger.add_end_step(url=self.driver.current_url, method='to_registration')
 
     def to_entrance(self):
-        """ Авторизация пользователя"""
-        self.driver.get(self.url)  # Добавлен переход на URL
-        self.get_current_url()
-        self.click_account()
-        self.click_account_enter()
+        with allure.step("To entrance"):
+            Logger.add_start_step(method='to_entrance')
+            """ Авторизация пользователя"""
+            self.driver.get(self.url)  # Добавлен переход на URL
+            self.get_current_url()
+            self.click_account()
+            self.click_account_enter()
+            Logger.add_end_step(url=self.driver.current_url, method='to_entrance')
 
     def logout(self):
-        """ Выход из аккаунта"""
-        self.click_account()
-        self.assert_word(self.get_button_logout(), 'Выйти')
-        self.click_button_logout()
+        with allure.step("Logout"):
+            Logger.add_start_step(method='logout')
+            """ Выход из аккаунта"""
+            self.click_account()
+            self.assert_word(self.get_button_logout(), 'Выйти')
+            self.click_button_logout()
+            Logger.add_end_step(url=self.driver.current_url, method='logout')
 
     def to_mixers(self):
-        """ Переход к смесителям  с основной страницы (Все товары - еще - смесители)"""
-        self.move_all_products()
-        time.sleep(3)
-        self.move_all_products_more()
-        time.sleep(3)
-        self.click_mixers()
-        time.sleep(3)
-
-# Вы успешно зарегистрированы
-# < h1
-# class ="ty-mainbox-title" >
-# Вы
-# успешно
-# зарегистрированы
-# < / h1 >
-# https://100sistem.ru/index.php?dispatch=profiles.success_add
+        with allure.step("To mixers"):
+            Logger.add_start_step(method='to_mixers')
+            """ Переход к смесителям  с основной страницы (Все товары - еще - смесители)"""
+            self.move_all_products()
+            time.sleep(3)
+            self.move_all_products_more()
+            time.sleep(3)
+            self.click_mixers()
+            time.sleep(3)
+            Logger.add_end_step(url=self.driver.current_url, method='to_mixers')

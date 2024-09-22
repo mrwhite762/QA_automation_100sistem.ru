@@ -1,3 +1,4 @@
+import allure
 import pytest
 from selenium import webdriver
 
@@ -10,6 +11,7 @@ def driver():
     yield driver
     driver.quit()
 
+@allure.description("Test registration")
 def test_registration(driver):
     print('Start Registration Test')
 

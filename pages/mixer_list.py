@@ -1,10 +1,13 @@
 import time
 
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from base.globals import Globals
 from pages.maine_page import Maine_page
+from utilites.Logger import Logger
 
 
 class Mixer_list(Maine_page):
@@ -12,7 +15,6 @@ class Mixer_list(Maine_page):
 
     def __init__(self, driver):
         super().__init__(driver)
-        self.didgit = ''
 
     # Locators
     brand = '//div[@id="sw_content_192_14"]'
@@ -91,12 +93,10 @@ class Mixer_list(Maine_page):
         print(f"Ввод максимальной цены '{price_text}'")
 
     def click_mixer_D1002100(self):
+        Globals.set_price_mixer_D1002100(self.get_mixer_D1002100_price())
+        print(f"Цена товара mixer_D1002100 установлена в глобальную переменную: {Globals.price_mixer_D1002100}")
         self.get_mixer_D1002100().click()
         print("Переход в карточку смесителя")
-
-    def conservation_mixer_D1002100_price(self):
-        self.didgit = self.get_mixer_D1002100_price()
-        print("Сохранение цены смесителя 'D1002100' в переменную")
 
     def click_add_cart(self):
         self.get_add_cart().click()
@@ -108,30 +108,27 @@ class Mixer_list(Maine_page):
 
     # Methods
     def selection_mixer(self):
-        """ выбор смесителя"""
-        self.driver.get(self.url)
-        self.get_current_url()
-        self.driver.maximize_window()
-        self.click_brand()
-        time.sleep(2)
-        self.input_brand_search()
-        time.sleep(2)
-        self.click_brand_dorff()
-        time.sleep(5)
-        self.assert_url("https://100sistem.ru/santehnika/smesiteli/dorff/")
-        self.click_price()
-        time.sleep(2)
-        self.input_price_limit_max()
-        time.sleep(5)
-        self.click_mixer_D1002100()
-        time.sleep(2)
-        self.conservation_mixer_D1002100_price()
-        self.click_add_cart()
-        time.sleep(3)
-        self.click_order()
-        time.sleep(5)
-
-
-
-
-
+        with allure.step("Selection mixer"):
+            Logger.add_start_step(method='selection_mixer')
+            """ выбор смесителя"""
+            self.driver.get(self.url)
+            self.get_current_url()
+            self.driver.maximize_window()
+            self.click_brand()
+            time.sleep(2)
+            self.input_brand_search()
+            time.sleep(2)
+            self.click_brand_dorff()
+            time.sleep(5)
+            self.assert_url("https://100sistem.ru/santehnika/smesiteli/dorff/")
+            self.click_price()
+            time.sleep(2)
+            self.input_price_limit_max()
+            time.sleep(5)
+            self.click_mixer_D1002100() # переход в карточку + запись в глобальную переменную
+            time.sleep(2)
+            self.click_add_cart()
+            time.sleep(3)
+            self.click_order()
+            time.sleep(5)
+            Logger.add_end_step(url=self.driver.current_url, method='selection_mixer')

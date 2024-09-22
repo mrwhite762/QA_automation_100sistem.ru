@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -5,6 +6,8 @@ from pages.maine_page import Maine_page
 
 import time
 from faker import Faker
+
+from utilites.Logger import Logger
 
 
 class Registration_page(Maine_page):
@@ -129,27 +132,30 @@ class Registration_page(Maine_page):
 
     # Methods
     def register_user(self, user, fname=None, lname=None, phone=None, lcard=None, email=None, passw=None):
-        """ Регистрация пользователя """
-        self.to_registration()  # Переход к странице регистрации
-        # self.driver.get(self.url)
-        self.driver.maximize_window()
-        time.sleep(5)
-        self.input_first_name(user, fname)
-        self.input_last_name(user, lname)
-        self.input_phone(user, phone)
-        self.input_loyalty_card(user, lcard)
-        self.input_email(user, email)
-        self.input_password(user, passw)
-        self.input_repeat_password(user, passw)
-        time.sleep(5)
-        self.click_agreement()
-        self.click_agreement2()
-        time.sleep(5)
-        self.click_registration_button()
-        time.sleep(5)
-        self.assert_url("https://100sistem.ru/index.php?dispatch=profiles.success_add")
-        self.assert_word(self.get_registration_success(), "Вы успешно зарегистрированы")
-        time.sleep(5)
+        with allure.step("Register user"):
+            Logger.add_start_step(method='register_user')
+            """ Регистрация пользователя """
+            self.to_registration()  # Переход к странице регистрации
+            # self.driver.get(self.url)
+            self.driver.maximize_window()
+            time.sleep(3)
+            self.input_first_name(user, fname)
+            self.input_last_name(user, lname)
+            self.input_phone(user, phone)
+            self.input_loyalty_card(user, lcard)
+            self.input_email(user, email)
+            self.input_password(user, passw)
+            self.input_repeat_password(user, passw)
+            time.sleep(2)
+            self.click_agreement()
+            self.click_agreement2()
+            time.sleep(2)
+            self.click_registration_button()
+            time.sleep(5)
+            self.assert_url("https://100sistem.ru/index.php?dispatch=profiles.success_add")
+            self.assert_word(self.get_registration_success(), "Вы успешно зарегистрированы")
+            time.sleep(5)
+            Logger.add_end_step(url=self.driver.current_url, method='register_user')
 
 
 class User:

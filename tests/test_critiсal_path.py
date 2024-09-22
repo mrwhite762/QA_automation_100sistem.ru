@@ -1,5 +1,6 @@
 import time
 
+import allure
 import pytest
 from selenium import webdriver
 
@@ -13,6 +14,7 @@ def driver():
     yield driver
     driver.quit()
 
+@allure.description("Test critical path")
 def test_critical_path(driver):
     print('НАЧАЛО ПРОВЕРКИ')
 
@@ -22,7 +24,6 @@ def test_critical_path(driver):
         email = "kudrjavtsevzinovi@example.org"
         password = "*+1M^Fkl"
         login_page.login_with_email(email, password)
-        time.sleep(3)
         login_page.to_mixers()
 
         # Создаем экземпляр Mixer_list и вызываем метод selection_mixer

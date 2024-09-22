@@ -1,10 +1,13 @@
 import time
 
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from base.globals import Globals
 from pages.mixer_list import Mixer_list
+from utilites.Logger import Logger
 
 
 class Placing_order(Mixer_list):
@@ -84,14 +87,6 @@ class Placing_order(Mixer_list):
         return WebDriverWait(self.driver, 20).until(EC.visibility_of_element_located((By.XPATH, self.successful_order)))
 
     # Actions
-    def assert_prices(self):
-        try:
-            order_sum = self.get_order_sum()
-            assert self.didgit == order_sum, f"Цена смесителя ({self.didgit}) не совпадает с суммой в заказе ({order_sum})"
-            print("Цена смесителя совпадает с суммой в заказе")
-        except AssertionError as e:
-            print(e)
-            # Продолжаем выполнение кода
 
     def click_sogl1(self):
         try:
@@ -125,6 +120,7 @@ class Placing_order(Mixer_list):
         address_text = "пр. Культуры д. 29 к. 1"
         try:
             address_input_element = self.get_address()
+            address_input_element.clear()  # Очищаем поле с адресом
             address_input_element.send_keys(address_text)
             print(f"Ввод адреса: '{address_text}'")
         except Exception as e:
@@ -148,21 +144,24 @@ class Placing_order(Mixer_list):
 
     # Methods
     def place_order(self):
-        """ Оформление заказа """
-        self.assert_url(self.url)
-        self.assert_prices()
-        self.click_sogl2()
-        time.sleep(2)
-        self.input_address()
-        time.sleep(2)
-        self.click_delivery()
-        time.sleep(5)
-        self.click_delivery_cart()
-        time.sleep(25) # На странице отрабатывает джаваскрипт с задержкой, пауза необходима
-        self.input_note()
-        time.sleep(2)
-        self.click_sogl1()
-        time.sleep(2)
-        self.click_design()
-        time.sleep(25) # Пауза для успешного формирования заказа
-        self.assert_word(self.get_successful_order(), "Поздравляем! Ваш заказ размещен.")
+        with allure.step("Place order"):
+            Logger.add_start_step(method='place_order')
+            """ Оформление заказа """
+            self.assert_url(self.url)
+            self.assert_price(Globals.price_mixer_D1002100, self.get_order_sum())  # Сравнение цен
+            self.click_sogl2()
+            time.sleep(2)
+            self.input_address()
+            time.sleep(2)
+            self.click_delivery()
+            time.sleep(5)
+            self.click_delivery_cart()
+            time.sleep(25)  # На странице отрабатывает джаваскрипт с задержкой, пауза необходима
+            self.input_note()
+            time.sleep(2)
+            self.click_sogl1()
+            time.sleep(2)
+            self.click_design()
+            time.sleep(25)  # Пауза для успешного формирования заказа
+            self.assert_word(self.get_successful_order(), "Поздравляем! Ваш заказ размещен.")
+            Logger.add_end_step(url=self.driver.current_url, method='place_order')

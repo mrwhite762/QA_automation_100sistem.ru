@@ -1,3 +1,4 @@
+import allure
 import pytest
 from selenium import webdriver
 
@@ -9,6 +10,7 @@ def driver():
     yield driver
     driver.quit()
 
+@allure.description("Test login with email")
 def test_login_with_email(driver):
     print('НАЧАЛО ПРОВЕРКИ ВХОДА С EMAIL (С ВЫХОДОМ ИЗ АККАУНТА)')
 
@@ -29,6 +31,7 @@ def test_login_with_email(driver):
     finally:
         print('ОКОНЧАНИЕ ПРОВЕРКИ ВХОДА С EMAIL (С ВЫХОДОМ ИЗ АККАУНТА)')
 
+@allure.description("Test login with lcard")
 def test_login_with_lcard(driver):
     print('НАЧАЛО ПРОВЕРКИ ВХОДА С КАРТОЙ ЛОЯЛЬНОСТИ (С ВЫХОДОМ ИЗ АККАУНТА)')
 
